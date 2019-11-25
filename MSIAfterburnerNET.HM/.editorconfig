@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1123: Add parentheses according to operator precedence.
+dotnet_diagnostic.RCS1123.severity = none

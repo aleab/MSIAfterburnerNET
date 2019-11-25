@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Project Info -->
+  <PropertyGroup>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net462</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Assembly Info -->
+  <PropertyGroup>
+    <!-- Calculate Revision number -->
+    <TimeOfDayTotalSeconds>$([MSBuild]::Divide($([System.DateTime]::get_Now().get_TimeOfDay().get_TotalSeconds()), 2).ToString('F0'))</TimeOfDayTotalSeconds>
+    <Revision>$(TimeOfDayTotalSeconds)</Revision>
+    <Revision Condition="'$(Configuration)' != 'Release'">0</Revision>
+
+    <!-- Determine appropriate year(s) for the copyright field -->
+    <StartYear>2019</StartYear>
+    <CurrentYear>$([System.DateTime]::get_Now().get_Year().ToString('F0'))</CurrentYear>
+    <CopyrightYear>$(CurrentYear)</CopyrightYear>
+    <CopyrightYear Condition="'$(CurrentYear)' != '$(StartYear)'">$(StartYear)-$(CurrentYear)</CopyrightYear>
+
+    <Version>1.0.1</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version).$(Revision)</FileVersion>
+    <AssemblyName>MSIAfterburnerNET.Common</AssemblyName>
+    <Description>A C#/.NET wrapper around MSI Afterburner's shared memory - common classes</Description>
+    <Authors>Alessandro Attard Barbini</Authors>
+    <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
+    <PackageTags>msi-afterburner, api-wrapper</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <!-- Other Properties -->
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon />
+    <StartupObject />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- Build Configurations -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- Project Files -->
+
+  <!-- REFERENCES -->
+
+  <!-- Build Events -->
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <ItemGroup>
+      <NupkgFiles Include="$(TargetDir)*.nupkg" />
+    </ItemGroup>
+    <Delete Files="@(NupkgFiles)" />
+  </Target>
+</Project>

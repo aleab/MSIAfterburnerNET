@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Project Info -->
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <!-- Assembly Info -->
+  <PropertyGroup>
+    <!-- Calculate Revision number -->
+    <TimeOfDayTotalSeconds>$([MSBuild]::Divide($([System.DateTime]::get_Now().get_TimeOfDay().get_TotalSeconds()), 2).ToString('F0'))</TimeOfDayTotalSeconds>
+    <Revision>$(TimeOfDayTotalSeconds)</Revision>
+    <Revision Condition="'$(Configuration)' != 'Release'">0</Revision>
+
+    <!-- Determine appropriate year(s) for the copyright field -->
+    <StartYear>2019</StartYear>
+    <CurrentYear>$([System.DateTime]::get_Now().get_Year().ToString('F0'))</CurrentYear>
+    <CopyrightYear>$(CurrentYear)</CopyrightYear>
+    <CopyrightYear Condition="'$(CurrentYear)' != '$(StartYear)'">$(StartYear)-$(CurrentYear)</CopyrightYear>
+
+    <Version>0.1.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version).$(Revision)</FileVersion>
+    <AssemblyName>MSIAfterburnerNET.All</AssemblyName>
+    <Description>A C#/.NET wrapper around MSI Afterburner's shared memory</Description>
+    <Authors>Alessandro Attard Barbini</Authors>
+    <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
+    <PackageTags>msi-afterburner, api-wrapper</PackageTags>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <!-- Other Properties -->
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon />
+    <StartupObject />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- Project Files -->
+
+  <!-- REFERENCES -->
+  <ItemGroup>
+    <ProjectReference Include="..\MSIAfterburnerNET.CM\MSIAfterburnerNET.CM.csproj" />
+    <ProjectReference Include="..\MSIAfterburnerNET.HM\MSIAfterburnerNET.HM.csproj" />
+  </ItemGroup>
+
+  <!-- Build Events -->
+  <Target Name="PostPack" AfterTargets="Pack">
+    <!-- Create a meta-package -->
+    <ItemGroup>
+      <FilesToDelete Include="$(TargetDir)*" />
+    </ItemGroup>
+
+    <Message Text="[POST-PACK]" Importance="high" />
+    <Delete Files="@(FilesToDelete)" />
+
+    <DownloadFile Condition="!Exists('$(ProjectDir)nuget.exe')" SourceUrl="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" DestinationFolder="$(ProjectDir)" />
+    <Exec Command="powershell -File &quot;$(ProjectDir)nuspec.ps1&quot; &quot;$(ProjectDir)obj\$(Configuration)\$(TargetName).$(Version).nuspec&quot;" />
+    <Copy SourceFiles="$(ProjectDir)obj\$(Configuration)\$(TargetName).$(Version).nuspec" DestinationFolder="$(TargetDir)" />
+    <Exec WorkingDirectory="$(TargetDir)" Command="&quot;$(ProjectDir)nuget.exe&quot; pack &quot;$(TargetName).$(Version).nuspec&quot;" />
+  </Target>
+</Project>

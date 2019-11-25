@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Project Info -->
+  <PropertyGroup>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Assembly Info -->
+  <PropertyGroup>
+    <!-- Calculate Revision number -->
+    <TimeOfDayTotalSeconds>$([MSBuild]::Divide($([System.DateTime]::get_Now().get_TimeOfDay().get_TotalSeconds()), 2).ToString('F0'))</TimeOfDayTotalSeconds>
+    <Revision>$(TimeOfDayTotalSeconds)</Revision>
+    <Revision Condition="'$(Configuration)' != 'Release'">0</Revision>
+
+    <!-- Determine appropriate year(s) for the copyright field -->
+    <StartYear>2019</StartYear>
+    <CurrentYear>$([System.DateTime]::get_Now().get_Year().ToString('F0'))</CurrentYear>
+    <CopyrightYear>$(CurrentYear)</CopyrightYear>
+    <CopyrightYear Condition="'$(CurrentYear)' != '$(StartYear)'">$(StartYear)-$(CurrentYear)</CopyrightYear>
+
+    <Version>1.0.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version).$(Revision)</FileVersion>
+    <AssemblyName>MSIAfterburnerNET.Sample</AssemblyName>
+    <Description></Description>
+    <Authors>Alessandro Attard Barbini</Authors>
+    <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <!-- Other Properties -->
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <!-- Build Configurations -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+
+  <!-- Project Files -->
+  <ItemGroup>
+    <None Update="app.config" />
+  </ItemGroup>
+
+  <!-- REFERENCES -->
+  <ItemGroup>
+    <ProjectReference Include="..\MSIAfterburnerNET.HM\MSIAfterburnerNET.HM.csproj" />
+  </ItemGroup>
+</Project>
