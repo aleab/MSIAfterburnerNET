@@ -31,6 +31,9 @@
     <Authors>Alessandro Attard Barbini</Authors>
     <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
     <PackageTags>msi-afterburner, api-wrapper</PackageTags>
+    <RepositoryUrl>https://github.com/aleab/MSIAfterburnerNET</RepositoryUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
@@ -40,40 +43,10 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon />
     <StartupObject />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-
-  <!-- Build Configurations -->
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
-
-  <!-- Project Files -->
 
   <!-- REFERENCES -->
   <ItemGroup>
     <ProjectReference Include="..\MSIAfterburnerNET.Common\MSIAfterburnerNET.Common.csproj" />
   </ItemGroup>
-
-  <!-- Build Events -->
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <ItemGroup>
-      <NupkgFiles Include="$(TargetDir)*.nupkg" />
-    </ItemGroup>
-    <Delete Files="@(NupkgFiles)" />
-  </Target>
 </Project>

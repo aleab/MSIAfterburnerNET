@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Project Info -->
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <!-- Assembly Info -->
+  <PropertyGroup>
+    <!-- Calculate Revision number -->
+    <TimeOfDayTotalSeconds>$([MSBuild]::Divide($([System.DateTime]::get_Now().get_TimeOfDay().get_TotalSeconds()), 2).ToString('F0'))</TimeOfDayTotalSeconds>
+    <Revision>$(TimeOfDayTotalSeconds)</Revision>
+    <Revision Condition="'$(Configuration)' != 'Release'">0</Revision>
+
+    <!-- Determine appropriate year(s) for the copyright field -->
+    <StartYear>2019</StartYear>
+    <CurrentYear>$([System.DateTime]::get_Now().get_Year().ToString('F0'))</CurrentYear>
+    <CopyrightYear>$(CurrentYear)</CopyrightYear>
+    <CopyrightYear Condition="'$(CurrentYear)' != '$(StartYear)'">$(StartYear)-$(CurrentYear)</CopyrightYear>
+
+    <Version>0.1.0</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version).$(Revision)</FileVersion>
+    <AssemblyName>MSIAfterburnerNET.All</AssemblyName>
+    <Description>A C#/.NET wrapper around MSI Afterburner's shared memory</Description>
+    <Authors>Alessandro Attard Barbini</Authors>
+    <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
+    <PackageTags>msi-afterburner, api-wrapper</PackageTags>
+    <RepositoryUrl>https://github.com/aleab/MSIAfterburnerNET</RepositoryUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <!-- Other Properties -->
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon />
+    <StartupObject />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- Project Files -->
+
+  <!-- REFERENCES -->
+  <ItemGroup>
+    <ProjectReference Include="..\MSIAfterburnerNET.CM\MSIAfterburnerNET.CM.csproj" />
+    <ProjectReference Include="..\MSIAfterburnerNET.HM\MSIAfterburnerNET.HM.csproj" />
+  </ItemGroup>
+
+  <!-- BUILD EVENTS -->
+  <Target Name="PostPack" AfterTargets="Pack">
+    <ItemGroup>
+      <FilesToDelete Include="$(TargetDir)*" />
+    </ItemGroup>
+
+    <Message Text="[POST-PACK]" Importance="high" />
+    <DownloadFile Condition="!Exists('$(ProjectDir)nuget.exe')" SourceUrl="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" DestinationFolder="$(ProjectDir)" />
+    <Delete Files="@(FilesToDelete)" />
+
+    <!-- Create a meta-package -->
+    <Exec Command="powershell -File &quot;$(ProjectDir)nuspec.ps1&quot; &quot;$(ProjectDir)obj\$(Configuration)\$(TargetName).$(Version).nuspec&quot;" />
+    <Copy SourceFiles="$(ProjectDir)obj\$(Configuration)\$(TargetName).$(Version).nuspec" DestinationFolder="$(TargetDir)" />
+    <Exec WorkingDirectory="$(TargetDir)" Command="&quot;$(ProjectDir)nuget.exe&quot; pack &quot;$(TargetName).$(Version).nuspec&quot; -Properties Configuration=$(Configuration)" />
+    <Delete Files="$(TargetDir)$(TargetName).$(Version).nuspec" />
+
+    <!-- Create the other packages -->
+    <Exec WorkingDirectory="$(SolutionDir)MSIAfterburnerNET.Common"
+          Command="dotnet pack --nologo -o &quot;$(TargetDir.TrimEnd('\'))&quot; --no-build --include-symbols -c $(Configuration) MSIAfterburnerNET.Common.csproj" />
+    <Exec WorkingDirectory="$(SolutionDir)MSIAfterburnerNET.HM"
+          Command="dotnet pack --nologo -o &quot;$(TargetDir.TrimEnd('\'))&quot; --no-build --include-symbols -c $(Configuration) MSIAfterburnerNET.HM.csproj" />
+    <Exec WorkingDirectory="$(SolutionDir)MSIAfterburnerNET.CM"
+          Command="dotnet pack --nologo -o &quot;$(TargetDir.TrimEnd('\'))&quot; --no-build --include-symbols -c $(Configuration) MSIAfterburnerNET.CM.csproj" />
+  </Target>
+  
+</Project>

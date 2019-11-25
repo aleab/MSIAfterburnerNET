@@ -31,6 +31,9 @@
     <Authors>Alessandro Attard Barbini</Authors>
     <Copyright>Copyright © $(CopyrightYear) $(Authors)</Copyright>
     <PackageTags>msi-afterburner, api-wrapper</PackageTags>
+    <RepositoryUrl>https://github.com/aleab/MSIAfterburnerNET</RepositoryUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
@@ -40,7 +43,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ApplicationIcon />
     <StartupObject />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <!-- Build Configurations -->
@@ -59,12 +61,4 @@
   <ItemGroup>
     <ProjectReference Include="..\MSIAfterburnerNET.Common\MSIAfterburnerNET.Common.csproj" />
   </ItemGroup>
-
-  <!-- Build Events -->
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <ItemGroup>
-      <NupkgFiles Include="$(TargetDir)*.nupkg" />
-    </ItemGroup>
-    <Delete Files="@(NupkgFiles)" />
-  </Target>
 </Project>

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSIAfterburnerNET.Sample", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSIAfterburnerNET.CM", "MSIAfterburnerNET.CM\MSIAfterburnerNET.CM.csproj", "{8ED4F795-2521-4A39-BCDF-BCE7ECD6863D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSIAfterburnerNET.All", "MSIAfterburnerNET\MSIAfterburnerNET.All.csproj", "{0AE7D2CF-A5A7-4ACB-B775-86BFF121FB7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSIAfterburnerNET.All", "MSIAfterburnerNET.All\MSIAfterburnerNET.All.csproj", "{0AE7D2CF-A5A7-4ACB-B775-86BFF121FB7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
