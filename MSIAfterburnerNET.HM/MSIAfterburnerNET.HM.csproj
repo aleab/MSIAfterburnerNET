@@ -23,7 +23,7 @@
     <CopyrightYear>$(CurrentYear)</CopyrightYear>
     <CopyrightYear Condition="'$(CurrentYear)' != '$(StartYear)'">$(StartYear)-$(CurrentYear)</CopyrightYear>
 
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version).$(Revision)</FileVersion>
     <AssemblyName>MSIAfterburnerNET.HM</AssemblyName>

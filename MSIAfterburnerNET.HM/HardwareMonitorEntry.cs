@@ -1,6 +1,5 @@
 ﻿using MSIAfterburnerNET.Common.Extensions;
 using MSIAfterburnerNET.HM.Interop;
-using System;
 
 namespace MSIAfterburnerNET.HM
 {
@@ -22,7 +21,7 @@ namespace MSIAfterburnerNET.HM
         public string LocalizedSrcName => this.NativeEntry.HasValue ? new string(this.NativeEntry.Value.localizedSrcName).TrimEnd((char)0) : null;
         public string LocalizedSrcUnits => this.NativeEntry.HasValue ? new string(this.NativeEntry.Value.localizedSrcUnits).TrimEnd((char)0) : null;
         public string RecommendedFormat => this.NativeEntry.HasValue ? new string(this.NativeEntry.Value.recommendedFormat).TrimEnd((char)0) : null;
-        public float Data => this.NativeEntry.HasValue && !this.NativeEntry.Value.data.IsAlmostEqual(0.0f, 3.40282346638529E+38f) ? this.NativeEntry.Value.data : 0.0f;
+        public float Data => this.NativeEntry.HasValue && !this.NativeEntry.Value.data.IsAlmostEqual(float.MaxValue, 1E-20f) ? this.NativeEntry.Value.data : 0.0f;
         public float MinLimit => this.NativeEntry?.minLimit ?? 0.0f;
         public float MaxLimit => this.NativeEntry?.maxLimit ?? 0.0f;
         public MAHM_SHARED_MEMORY_ENTRY_FLAG Flags => this.NativeEntry?.flags ?? MAHM_SHARED_MEMORY_ENTRY_FLAG.None;
