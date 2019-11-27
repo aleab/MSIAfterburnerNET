@@ -7,7 +7,7 @@ namespace MSIAfterburnerNET.HM
 {
     public class HardwareMonitor : IDisposable
     {
-        public static uint GPU_GLOBAL_INDEX = uint.MaxValue;
+        public static uint GLOBAL_INDEX = uint.MaxValue;
 
         private HMSharedMemory mmf;
 
@@ -117,24 +117,19 @@ namespace MSIAfterburnerNET.HM
             }
         }
 
-        public void RefreshEntry(uint gpuIndex, MONITORING_SOURCE_ID id)
+        public void RefreshEntry(MONITORING_SOURCE_ID id, uint componentIndex)
         {
-            if (!this.VerifyGpuIndex(gpuIndex))
-                throw new ArgumentOutOfRangeException();
             if (!Enum.IsDefined(typeof(MONITORING_SOURCE_ID), id))
                 throw new ArgumentOutOfRangeException();
 
-            int index = Array.FindIndex(this.Entries, e => e.GPU == gpuIndex && e.SrcId == id);
+            int index = Array.FindIndex(this.Entries, e => e.SrcId == id && e.ComponentIndex == componentIndex);
             if (index >= 0)
                 this.LoadEntry((uint)index);
         }
 
-        public void RefreshEntry(uint gpuIndex, string name)
+        public void RefreshEntry(string name, uint componentIndex)
         {
-            if (!this.VerifyGpuIndex(gpuIndex))
-                throw new ArgumentOutOfRangeException();
-
-            int index = Array.FindIndex(this.Entries, e => e.GPU == gpuIndex && e.SrcName == name);
+            int index = Array.FindIndex(this.Entries, e => e.SrcName == name && e.ComponentIndex == componentIndex);
             if (index >= 0)
                 this.LoadEntry((uint)index);
         }
@@ -146,9 +141,6 @@ namespace MSIAfterburnerNET.HM
                 this.LoadEntry((uint)index);
         }
 
-        /// <summary>
-        /// Returns the first entry with the specified <see cref="MONITORING_SOURCE_ID"/>.
-        /// </summary>
         public HardwareMonitorEntry GetEntry(MONITORING_SOURCE_ID id)
         {
             if (!Enum.IsDefined(typeof(MONITORING_SOURCE_ID), id))
@@ -157,31 +149,17 @@ namespace MSIAfterburnerNET.HM
             return Array.Find(this.Entries, e => e.SrcId == id);
         }
 
-
-        /// <summary>
-        /// Returns the entry with the specified <see cref="MONITORING_SOURCE_ID"/> from the specified GPU.
-        /// </summary>
-        public HardwareMonitorEntry GetEntry(uint gpuIndex, MONITORING_SOURCE_ID id)
+        public HardwareMonitorEntry GetEntry(MONITORING_SOURCE_ID id, uint componentIndex)
         {
-            if (!this.VerifyGpuIndex(gpuIndex))
-                throw new ArgumentOutOfRangeException();
             if (!Enum.IsDefined(typeof(MONITORING_SOURCE_ID), id))
                 throw new ArgumentOutOfRangeException();
 
-            return Array.Find(this.Entries, e => e.GPU == gpuIndex && e.SrcId == id);
+            return Array.Find(this.Entries, e => e.SrcId == id && e.ComponentIndex == componentIndex);
         }
 
-        public HardwareMonitorEntry GetEntry(uint gpuIndex, string name)
+        public HardwareMonitorEntry GetEntry(string name, uint componentIndex)
         {
-            if (!this.VerifyGpuIndex(gpuIndex))
-                throw new ArgumentOutOfRangeException();
-
-            return Array.Find(this.Entries, e => e.GPU == gpuIndex && e.SrcName == name);
-        }
-
-        private bool VerifyGpuIndex(uint gpuIndex)
-        {
-            return gpuIndex == uint.MaxValue || gpuIndex <= this.Header.EntryCount - 1U;
+            return Array.Find(this.Entries, e => e.SrcName == name && e.ComponentIndex == componentIndex);
         }
 
         #region IDisposable Support

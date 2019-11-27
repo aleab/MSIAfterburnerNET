@@ -25,7 +25,7 @@ namespace MSIAfterburnerNET.HM
         public float MinLimit => this.NativeEntry?.minLimit ?? 0.0f;
         public float MaxLimit => this.NativeEntry?.maxLimit ?? 0.0f;
         public MAHM_SHARED_MEMORY_ENTRY_FLAG Flags => this.NativeEntry?.flags ?? MAHM_SHARED_MEMORY_ENTRY_FLAG.None;
-        public uint GPU => this.NativeEntry?.gpu ?? 0;
+        public uint ComponentIndex => this.NativeEntry?.index ?? HardwareMonitor.GLOBAL_INDEX;
         public MONITORING_SOURCE_ID SrcId => this.NativeEntry.HasValue ? (MONITORING_SOURCE_ID)this.NativeEntry.Value.srcId : MONITORING_SOURCE_ID.UNKNOWN;
 
         public override string ToString()
@@ -41,7 +41,7 @@ namespace MSIAfterburnerNET.HM
                     ";MinLimit = " + this.MinLimit.ToString() +
                     ";MaxLimit = " + this.MaxLimit.ToString() +
                     ";Flags = " + this.Flags.ToString() +
-                    ";GPU = " + this.GPU.ToString() +
+                    ";ComponentIndex = " + this.ComponentIndex.ToString() +
                     ";SrcId = " + this.SrcId.ToString();
             }
             catch

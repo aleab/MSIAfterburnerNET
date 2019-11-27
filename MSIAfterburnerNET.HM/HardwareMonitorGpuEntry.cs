@@ -5,7 +5,7 @@ namespace MSIAfterburnerNET.HM
     public class HardwareMonitorGpuEntry
     {
         public MAHM_SHARED_MEMORY_GPU_ENTRY? NativeGpuEntry { get; set; }
-        public uint Index { get; } = HardwareMonitor.GPU_GLOBAL_INDEX;
+        public uint Index { get; } = HardwareMonitor.GLOBAL_INDEX;
 
         public HardwareMonitorGpuEntry()
         {

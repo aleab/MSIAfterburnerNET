@@ -35,7 +35,7 @@ namespace MSIAfterburnerNET.Sample
                     }
 
                     // show a data source monitor several times
-                    HardwareMonitorEntry framerate = mahm.GetEntry(HardwareMonitor.GPU_GLOBAL_INDEX, MONITORING_SOURCE_ID.FRAMERATE);
+                    HardwareMonitorEntry framerate = mahm.GetEntry(MONITORING_SOURCE_ID.FRAMERATE, HardwareMonitor.GLOBAL_INDEX);
                     if (framerate != null)
                     {
                         Console.WriteLine("***** FRAMERATE *****");

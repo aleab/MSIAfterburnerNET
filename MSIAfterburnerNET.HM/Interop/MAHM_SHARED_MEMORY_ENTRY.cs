@@ -25,7 +25,7 @@ namespace MSIAfterburnerNET.HM.Interop
         public float minLimit;
         public float maxLimit;
         public MAHM_SHARED_MEMORY_ENTRY_FLAG flags;
-        public uint gpu;
+        public uint index;
         public uint srcId;
     }
 }
